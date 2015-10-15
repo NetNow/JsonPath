@@ -7,6 +7,9 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.EvaluationCallback;
 import com.jayway.jsonpath.internal.Path;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -252,12 +255,12 @@ public class TokenStack
             }
         }
     }
-    
+        
     private Object getNewJsonObject() {
         return conf.jsonProvider().createMap();
     }
 
-    private Object getJsonArrayType() {
+    public Object getJsonArrayType() {
         return this.jsonArrayType;
     }
 
@@ -265,7 +268,7 @@ public class TokenStack
         return conf.jsonProvider().createArray();
     }
    
-    private Class<? extends Object> getJsonObjectType() {
+    public Class<? extends Object> getJsonObjectType() {
         return this.jsonObjectType;
     }
 
@@ -278,9 +281,9 @@ public class TokenStack
             Object obj = this.objStack.peek();
             //log.trace("PP : Push[" + this.objStack.size() + "] " + jsObj.getClass().getSimpleName() + " -> " + obj.getClass());
             if (obj.getClass() == getJsonArrayType()) {
-                ((List)obj).add(jsObj);
+                ((ArrayNode)obj).add((ObjectNode)jsObj);
             } else if (obj.getClass() == getJsonObjectType()) {
-                ((HashMap<String,Object>)obj).put(key, jsObj);
+                ((ObjectNode)obj).put(key, (JsonNode)jsObj);
             } else {
                 throw new Exception("Unhandled type: " + obj.getClass());
             }
@@ -305,7 +308,7 @@ public class TokenStack
             
             //log.trace("PP : Pop " +( popObj != null ? popObj.getClass() : " null"));
             if (popObj.getClass() != jsObj) {
-                throw new Exception("Unexpected type : " + popObj.getClass());
+                throw new Exception("Unexpected type : " + popObj.getClass() + ", for: " +  popObj + ", path: " + path);
             } else {
                 popObj = this.objStack.pop();
                 if (this.objStack.size() > 0) {
@@ -335,11 +338,11 @@ public class TokenStack
         
         Class objInCls = objIn.getClass();
         if (objInCls == this.getJsonObjectType()) {
-            HashMap obj = (HashMap)objIn;
-            obj.put(((ObjectToken)el).key, value);
+            ObjectNode obj = (ObjectNode)objIn;
+            obj.put(((ObjectToken)el).key, (String)value);
         } else if (objInCls == this.getJsonArrayType()) {
-            ArrayList obj = (ArrayList)objIn;
-            obj.add(value);
+            ArrayNode obj = (ArrayNode)objIn;
+            obj.add((JsonNode)value);
         } else {
             throw new Exception("Unhandled type: " + objInCls);
         }

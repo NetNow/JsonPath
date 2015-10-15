@@ -17,6 +17,7 @@ package com.jayway.jsonpath.spi.json;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.jayway.jsonpath.InvalidJsonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,12 +104,15 @@ public class JacksonJsonProvider extends AbstractJsonProvider {
     }
 
     @Override
-    public List<Object> createArray() {
-        return new LinkedList<Object>();
+    public ArrayNode createArray() {
+         return objectMapper.createArrayNode();
+      //  return new ArrayNode();
     }
 
     @Override
     public Object createMap() {
-        return new LinkedHashMap<String, Object>();
+        
+        return objectMapper.createObjectNode();
+            //new LinkedHashMap<String, Object>();
     }
 }
