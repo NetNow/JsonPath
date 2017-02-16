@@ -10,6 +10,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+import com.fasterxml.jackson.databind.node.ValueNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -208,7 +210,7 @@ public class TokenStack
             }
             case VALUE_NUMBER_INT:
             {
-                IntToken newToken = new IntToken(parser.getValueAsInt());
+                LongToken newToken = new LongToken(parser.getValueAsLong());
                 curr.setValue(newToken);
                 needsPathCheck = true;
                 objPutVal(obj, curr, newToken.value);
@@ -281,7 +283,7 @@ public class TokenStack
             Object obj = this.objStack.peek();
             //log.trace("PP : Push[" + this.objStack.size() + "] " + jsObj.getClass().getSimpleName() + " -> " + obj.getClass());
             if (obj.getClass() == getJsonArrayType()) {
-                ((ArrayNode)obj).add((ObjectNode)jsObj);
+                ((ArrayNode)obj).add((JsonNode)jsObj);
             } else if (obj.getClass() == getJsonObjectType()) {
                 ((ObjectNode)obj).put(key, (JsonNode)jsObj);
             } else {
@@ -338,13 +340,44 @@ public class TokenStack
         
         Class objInCls = objIn.getClass();
         if (objInCls == this.getJsonObjectType()) {
-            ObjectNode obj = (ObjectNode)objIn;
-            obj.put(((ObjectToken)el).key, (String)value);
+           ObjectNode obj = (ObjectNode)objIn;
+           ObjectToken stackElement = (ObjectToken)el;
+           String key = stackElement.key;
+           
+           putStackObjectValue(obj, key, value);
         } else if (objInCls == this.getJsonArrayType()) {
             ArrayNode obj = (ArrayNode)objIn;
-            obj.add((JsonNode)value);
+            
+            putStackArrayValue(obj, value);
         } else {
             throw new Exception("Unhandled type: " + objInCls);
+        }
+    }
+
+    private void putStackArrayValue(ArrayNode obj, Object value) {
+        if (value instanceof String) {
+            JsonNode node = new TextNode(String.valueOf(value));
+            obj.add(node);
+        }  else if (value instanceof Integer) {
+            obj.add((Integer)value);
+        } else if (value instanceof Float) {
+            obj.add((Float)value);
+        } else if (value instanceof Long) {
+            obj.add((Long)value);
+        } else {
+            obj.add((JsonNode)value);
+        }
+    }
+
+    private void putStackObjectValue(ObjectNode obj, String key, Object value) {
+        if (value instanceof String) {
+            obj.put(key, (String)value);
+        } else if (value instanceof Integer) {
+            obj.put(key, (Integer)value);
+        } else if (value instanceof Long) {
+            obj.put(key, (Long)value);
+        } else if (value instanceof Float) {
+            obj.put(key, (Float)value);
         }
     }
 

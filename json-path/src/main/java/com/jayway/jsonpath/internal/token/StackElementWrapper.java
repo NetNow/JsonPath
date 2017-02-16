@@ -101,10 +101,10 @@ public class StackElementWrapper implements Predicate.PredicateContext
             //cache.put(elem, o);
             return o;
         }
-        case INTEGER_TOKEN:
+        case LONG_TOKEN:
         {
             if (o != null) return o;
-            o = new Integer(((IntToken)elem).value);
+            o = new Long(((LongToken)elem).value);
             //cache.put(elem, o);
             return o;
         }

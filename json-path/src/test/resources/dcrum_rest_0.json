@@ -1,0 +1,22 @@
+{
+    "columnRendererIds": ["DATE","STRING","NUMBER"],
+    "columnUnit": ["","",""],
+    "columnHeaderName": ["Time","Client site","Unique users"],
+    "columnHeader": ["begT","cLoc","CliCnt"],
+    "formattedData": [
+        ["02/08/2017 13:25","BPO Noida","40.0"],
+        ["02/08/2017 13:25","BPO Jaipur","59.0"]
+    ],
+    "dmiServiceError": [{
+        "errorDescriptions": null,
+        "infoDescriptions": null,
+        "warningDescriptions": null
+    }],
+    "timeoutValue": 600000,
+    "rawData": [
+        [1.4865603E12,null,40.0],
+        [1.4865603E12,null,59.0]
+    ],
+    "timeBegin": 1486560300000,
+    "timeEnd": 1486560600000
+}

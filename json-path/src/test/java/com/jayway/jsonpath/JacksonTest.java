@@ -1067,11 +1067,11 @@ public class JacksonTest extends BaseTest implements EvaluationCallback {
             assert(token.value == ((Float)expected).floatValue());
             break;
         }
-        case INTEGER_TOKEN:
+        case LONG_TOKEN:
         {
-            IntToken token = (IntToken)elem;
-            assert(expected instanceof Integer);
-            assert(token.value == ((Integer)expected).intValue());
+            LongToken token = (LongToken)elem;
+            assert(expected instanceof Long);
+            assert(token.value == ((Long)expected).longValue());
             break;
         }
         case ARRAY_TOKEN:

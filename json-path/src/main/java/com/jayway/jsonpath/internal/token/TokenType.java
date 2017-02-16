@@ -11,7 +11,8 @@ public enum TokenType
     OBJECT_TOKEN,
     STRING_TOKEN,
     FLOAT_TOKEN,
-    INTEGER_TOKEN
+    INTEGER_TOKEN,
+    LONG_TOKEN,
 }
 
 // End TokenType.java

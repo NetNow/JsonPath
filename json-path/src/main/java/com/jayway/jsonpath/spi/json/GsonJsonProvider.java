@@ -21,7 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.internal.LazilyParsedNumber;
+//import com.google.gson.internal.LazilyParsedNumber;
 import com.jayway.jsonpath.InvalidJsonException;
 import com.jayway.jsonpath.JsonPathException;
 import org.slf4j.Logger;
@@ -74,21 +74,24 @@ public class GsonJsonProvider extends AbstractJsonProvider {
     private static Number unwrapNumber(Number n) {
         Number unwrapped;
 
-        if (n instanceof LazilyParsedNumber) {
-            LazilyParsedNumber lpn = (LazilyParsedNumber) n;
-            BigDecimal bigDecimal = new BigDecimal(lpn.toString());
-            if (bigDecimal.scale() <= 0) {
-                if (bigDecimal.compareTo(new BigDecimal(Integer.MAX_VALUE)) <= 0) {
-                    unwrapped = bigDecimal.intValue();
-                } else {
-                    unwrapped = bigDecimal.longValue();
-                }
-            } else {
-                unwrapped = bigDecimal.doubleValue();
-            }
-        } else {
+// There's an outstanding issue with json-path using gson internal package, not exposed under OSGi: https://github.com/jayway/JsonPath/issues/289
+// ISS don't use GSON with json-path so this is not currently an issue.
+        
+//        if (n instanceof LazilyParsedNumber) {
+//            LazilyParsedNumber lpn = (LazilyParsedNumber) n;
+//            BigDecimal bigDecimal = new BigDecimal(lpn.toString());
+//            if (bigDecimal.scale() <= 0) {
+//                if (bigDecimal.compareTo(new BigDecimal(Integer.MAX_VALUE)) <= 0) {
+//                    unwrapped = bigDecimal.intValue();
+//                } else {
+//                    unwrapped = bigDecimal.longValue();
+//                }
+//            } else {
+//                unwrapped = bigDecimal.doubleValue();
+//            }
+//        } else {
             unwrapped = n;
-        }
+//        }
         return unwrapped;
     }
 
