@@ -6,9 +6,9 @@ displayName = "Json Path"
 description = "Java port of Stefan Goessner JsonPath."
 
 jar {
-    baseName 'json-path'
+    baseName 'json-path-mio'
     manifest {
-        attributes 'Implementation-Title': 'json-path', 'Implementation-Version': version
+        attributes 'Implementation-Title': 'json-path-mio', 'Implementation-Version': version
     }
 }
 
